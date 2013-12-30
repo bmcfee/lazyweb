@@ -2,11 +2,72 @@
 """A lightweight script to compile static websites with jinja2 and structured data"""
 
 import sys
+import os
 import argparse
-import jinja2
 import ujson as json
 import cPickle as pickle
+import jinja2
 
+
+def load_template(input_path):
+    '''Load the template data from the specified path.
+
+    :parameters:
+      - input_path : str
+          Path to the template on disk
+
+    :returns:
+      - template : jinja2.Template
+          The template object
+    '''
+
+    input_path = os.path.abspath(input_path)
+    
+    env = jinja2.environment.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(input_path)))
+
+    return env.get_template(os.path.basename(input_path))
+
+def load_data(data_file):
+    '''Load structured data from the specified path'''
+
+    try:
+        with open(data_file, 'r') as f:
+            return pickle.load(f)
+    except:
+        pass
+
+    with open(data_file, 'r') as f:
+        return json.loads(f.read())
+
+    try:
+        with open(data_file, 'r') as f:
+            return json.loads(f.read())
+    except:
+        pass
+
+    raise ValueError('Could not interpret data file: %s' % data_file)
+
+
+def compile(input_template=None, data_file=None, output_path=None):
+    '''Compile the template and save the output'''
+
+    # First, get the template
+    template    = load_template(input_template)
+
+    # Then load the data
+    if data_file is not None:
+        data    = load_data(data_file)
+    else:
+        data    = {}
+
+    # Render the output
+    output = template.render(**data)
+
+    if output_path is None:
+        output_path = os.path.extsep.join([os.path.splitext(input_template)[0], 'html'])
+
+    with open(output_path, 'w') as f:
+        f.write(output)
 
 def get_params():
     parser = argparse.ArgumentParser(description='Static compilation of jinja templates')
@@ -17,7 +78,7 @@ def get_params():
 
     parser.add_argument(    '-d',
                             '--data',
-                            dest        =   'data',
+                            dest        =   'data_file',
                             required    =   False,
                             type        =   str,
                             help        =   'path to the input data file (json or pickle)')
@@ -33,7 +94,7 @@ def get_params():
 
 def main():
     args = get_params()
-    print args
+    compile(**args)
 
 if __name__ == '__main__':
     main()
