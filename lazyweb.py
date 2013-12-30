@@ -47,18 +47,17 @@ def load_data(data_file):
 
     raise ValueError('Could not interpret data file: %s' % data_file)
 
-
-def compile(input_template=None, data_file=None, output_path=None):
+def compile(input_template=None, data_files=None, output_path=None):
     '''Compile the template and save the output'''
 
     # First, get the template
     template    = load_template(input_template)
 
     # Then load the data
-    if data_file is not None:
-        data    = load_data(data_file)
-    else:
-        data    = {}
+    data        = {}
+    if data_files is not None:
+        for data_file in data_files:
+            data.update(load_data(data_file))
 
     # Render the output
     output = template.render(**data)
@@ -76,12 +75,10 @@ def get_params():
                             action      =   'store',
                             help        =   'path to the input template file')
 
-    parser.add_argument(    '-d',
-                            '--data',
-                            dest        =   'data_file',
-                            required    =   False,
+    parser.add_argument(    dest        =   'data_files',
                             type        =   str,
-                            help        =   'path to the input data file (json or pickle)')
+                            nargs       =   '*',
+                            help        =   'paths to data files (json or pickle)')
 
     parser.add_argument(    '-o',
                             '--output',
