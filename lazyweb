@@ -39,12 +39,6 @@ def load_data(data_file):
     with open(data_file, 'r') as f:
         return json.loads(f.read())
 
-    try:
-        with open(data_file, 'r') as f:
-            return json.loads(f.read())
-    except:
-        pass
-
     raise ValueError('Could not interpret data file: %s' % data_file)
 
 def compile(input_template=None, data_files=None, output_path=None):

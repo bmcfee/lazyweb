@@ -11,7 +11,7 @@ setup(
     long_description="""\
         Python module for audio and music processing.
     """,
-    scripts=['lazyweb.py'],
+    scripts=['lazyweb'],
     classifiers=[
           "License :: OSI Approved :: GNU General Public License (GPL)",
           "Programming Language :: Python",
