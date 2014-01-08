@@ -9,7 +9,7 @@ setup(
     url='http://github.com/bmcfee/lazyweb',
     download_url='http://github.com/bmcfee/lazyweb/releases',
     long_description="""\
-        Python module for audio and music processing.
+        A lightweight jinja template compiler.
     """,
     scripts=['lazyweb'],
     classifiers=[
