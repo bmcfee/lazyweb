@@ -41,7 +41,7 @@ def load_data(data_file):
 
     raise ValueError('Could not interpret data file: %s' % data_file)
 
-def compile(input_template=None, data_files=None, output_path=None):
+def compile_tpl(input_template=None, data_files=None, output_path=None):
     '''Compile the template and save the output'''
 
     # First, get the template
@@ -85,7 +85,7 @@ def get_params():
 
 def main():
     args = get_params()
-    compile(**args)
+    compile_tpl(**args)
 
 if __name__ == '__main__':
     main()
