@@ -5,7 +5,7 @@ import sys
 import os
 import argparse
 import ujson as json
-import cPickle as pickle
+import pickle
 import jinja2
 
 
